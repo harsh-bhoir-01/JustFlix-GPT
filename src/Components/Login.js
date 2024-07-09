@@ -5,12 +5,20 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../Utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { BsEyeFill } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { addUser } from "../Utils/userSlice";
 
 const Login = () => {
   const [signInForm, setSignInForm] = useState(true);
+  const [showPassword, setShowPassword] = useState("password");
   const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
+  const dispatach = useDispatch();
 
   const userName = useRef(null);
   const email = useRef(null);
@@ -33,6 +41,21 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
+          updateProfile(user, {
+            displayName: userName.current.value,
+          })
+            .then(() => {
+              const { uid, email, displayName } = auth.currentUser;
+              dispatach(
+                addUser({ uid: uid, email: email, displayName: displayName })
+              );
+              navigate("/browse");
+            })
+            .catch((error) => {
+              setErrorMessage(error.message);
+            });
+
+          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -47,13 +70,21 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log(user);
+          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           setErrorMessage(errorCode + "-" + errorMessage);
         });
+    }
+  };
+
+  const toggleShowPassword = () => {
+    if (showPassword === "password") {
+      setShowPassword("text");
+    } else {
+      setShowPassword("password");
     }
   };
 
@@ -73,7 +104,7 @@ const Login = () => {
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="absolute mx-auto left-0 right-0 mt-32 flex flex-col w-[400px] bg-black rounded-[4px] bg-opacity-80"
+        className="select-none absolute mx-auto left-0 right-0 mt-32 flex flex-col w-[400px] bg-black rounded-[4px] bg-opacity-80"
       >
         <h1 className="mt-16 my-6 ml-16 font-sans text-white font-bold text-3xl select-none">
           {signInForm ? "Sign In" : "Sign Up"}
@@ -92,16 +123,24 @@ const Login = () => {
           type="text"
           placeholder="Email"
         />
-        <input
-          ref={password}
-          className=" p-4 my-2 ml-14 w-72 rounded-[4px] placeholder:font-sans placeholder:text-base placeholder:font-base bg-black bg-opacity-60 border border-white cursor-text text-white"
-          type="password"
-          placeholder="Password"
-        />
+        <div className="relative">
+          <input
+            ref={password}
+            className=" p-4 my-2 ml-14 w-72 rounded-[4px] placeholder:font-sans placeholder:text-base placeholder:font-base bg-black bg-opacity-60 border border-white cursor-text text-white"
+            type={showPassword}
+            placeholder="Password"
+          />
+          <span
+            onClick={() => toggleShowPassword()}
+            className="absolute  text-base top-7 right-[4.5rem] text-white cursor-pointer"
+          >
+            <BsEyeFill />
+          </span>
+        </div>
         {errorMessage == null ? null : (
           <div className="flex ml-14 font-mono text-base p-1 ">
             <AiFillCloseCircle className="mt-[5px] mr-1" />
-            <p className="ml-1">{errorMessage}</p>
+            <p className="ml-1 text-red-700">{errorMessage}</p>
           </div>
         )}
         <button
