@@ -1,3 +1,55 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.hide-scroll-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.arrow-button {
+  background-color: rgba(31, 41, 55, 0.75);
+  color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.arrow-button:hover {
+  background-color: rgba(31, 41, 55, 1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.arrow-button:focus {
+  outline: none;
+  ring: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.loader {
+  border: 4px solid rgba(255, 255, 255, 0.3); /* Light grey with opacity */
+  border-top: 4px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 40px; /* Smaller size */
+  height: 40px; /* Smaller size */
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

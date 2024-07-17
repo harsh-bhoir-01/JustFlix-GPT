@@ -8,16 +8,16 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../Utils/firebase";
-import { useNavigate } from "react-router-dom";
 import { BsEyeFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { addUser } from "../Utils/userSlice";
+import { NETFLIX_BG } from "../Utils/constants";
+import Footer from "./Footer";
 
 const Login = () => {
   const [signInForm, setSignInForm] = useState(true);
   const [showPassword, setShowPassword] = useState("password");
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate();
   const dispatach = useDispatch();
 
   const userName = useRef(null);
@@ -49,13 +49,10 @@ const Login = () => {
               dispatach(
                 addUser({ uid: uid, email: email, displayName: displayName })
               );
-              navigate("/browse");
             })
             .catch((error) => {
               setErrorMessage(error.message);
             });
-
-          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -70,7 +67,6 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
-          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -96,11 +92,7 @@ const Login = () => {
     <div>
       <Header />
       <div>
-        <img
-          className="absolute"
-          alt="bg"
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/335ddde7-3955-499c-b4cc-ca2eb7e1ae71/a7d20bc1-831c-4f9d-8153-11bdf7a08d23/IN-en-20240624-POP_SIGNUP_TWO_WEEKS-perspective_WEB_13cda806-d858-493e-b4aa-f2792ff965dc_small.jpg"
-        />
+        <img className="absolute" alt="bg" src={NETFLIX_BG} />
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}
@@ -158,6 +150,7 @@ const Login = () => {
             : "Already registered? Sign In now..."}
         </p>
       </form>
+      <Footer />
     </div>
   );
 };

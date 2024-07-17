@@ -3,13 +3,13 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDMximyjYgcH8KO_wpaHJAAYMTPnpGC_s0",
-  authDomain: "justflixgpt.firebaseapp.com",
-  projectId: "justflixgpt",
-  storageBucket: "justflixgpt.appspot.com",
-  messagingSenderId: "723095497734",
-  appId: "1:723095497734:web:37b09a6d98224416786787",
-  measurementId: "G-CJD43TEKBQ",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECTID,
+  storageBucket: process.env.REACT_APP_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_MEASSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
